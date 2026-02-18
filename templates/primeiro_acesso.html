@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Primeiro Acesso</title>
+
+    <!-- Fonte -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+    box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f6f8;
+        }
+
+        /* BANNER SUPERIOR */
+        .banner {
+            background-color: #006854;
+            background-image:
+                linear-gradient(rgba(0, 104, 84, 0.85), rgba(0, 104, 84, 0.85)),
+                url("{{ url_for('static', filename='background.png') }}");
+            background-size: 1000px;
+            background-repeat: repeat;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .banner h1 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        /* CARD CENTRAL */
+        .container {
+            display: flex;
+            justify-content: center;
+            margin-top: -40px;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            width: 400px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #006854;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #006854;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #005044;
+        }
+
+        .mensagem-erro {
+            color: red;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .mensagem-sucesso {
+            color: green;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .voltar {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .voltar a {
+            text-decoration: none;
+            color: #006854;
+            font-weight: 600;
+        }
+        .senha-wrapper {
+            position: relative;
+            margin-bottom: 15px; /* mesmo espaçamento dos outros inputs */
+        }
+
+        .senha-wrapper input {
+        width: 100%;
+        padding: 12px 75px 12px 12px;
+        }
+
+        .toggle-senha {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 13px;
+            color: #006854;
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+
+
+
+<body>
+
+    <div class="banner">
+        <h1>Portal do Cooperado</h1>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Primeiro Acesso</h2>
+
+            {% if erro %}
+                <div class="mensagem-erro">{{ erro }}</div>
+            {% endif %}
+
+            {% if sucesso %}
+                <div class="mensagem-sucesso">{{ sucesso }}</div>
+            {% endif %}
+
+            <form method="POST">
+                <input type="text" name="nome" placeholder="Nome Completo" required>
+                <input type="text" id="cpf_cnpj" name="cpf" placeholder="CPF ou CNPJ" required>
+                <input type="email" name="email" placeholder="E-mail" required>
+                <div class="senha-wrapper">
+                    <input type="password" id="senha" name="senha" placeholder="Senha" required>
+                    <span id="toggleSenha" class="toggle-senha">
+                        Mostrar
+                    </span>
+                </div>
+
+
+                <button type="submit">Solicitar Acesso</button>
+            </form>
+
+            <div class="voltar">
+                <a href="{{ url_for('login') }}">← Voltar ao Login</a>
+            </div>
+
+        </div>
+    </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ===== MÁSCARA CPF / CNPJ =====
+    const cpfInput = document.getElementById("cpf_cnpj");
+
+    cpfInput.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, "");
+
+        if (value.length <= 11) {
+            value = value.replace(/(\d{3})(\d)/, "$1.$2");
+            value = value.replace(/(\d{3})(\d)/, "$1.$2");
+            value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        } else {
+            value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+            value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+            value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
+            value = value.replace(/(\d{4})(\d)/, "$1-$2");
+        }
+
+        e.target.value = value;
+    });
+
+    // ===== MOSTRAR / OCULTAR SENHA =====
+    const toggle = document.getElementById("toggleSenha");
+    const senhaInput = document.getElementById("senha");
+
+    toggle.addEventListener("click", function () {
+        if (senhaInput.type === "password") {
+            senhaInput.type = "text";
+            toggle.textContent = "Ocultar";
+        } else {
+            senhaInput.type = "password";
+            toggle.textContent = "Mostrar";
+        }
+    });
+
+});
+</script>
+
+
+</body>
+</html>

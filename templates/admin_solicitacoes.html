@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Painel Administrativo</title>
+
+    <!-- Fonte -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f6f8;
+        }
+
+        /* BANNER */
+        .banner {
+            background-color: #006854;
+            background-image:
+                linear-gradient(rgba(0, 104, 84, 0.85), rgba(0, 104, 84, 0.85)),
+                url("{{ url_for('static', filename='background.png') }}");
+            background-size: 1000px;
+            background-repeat: repeat;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .banner h1 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        /* CONTAINER */
+        .container {
+            display: flex;
+            justify-content: center;
+            margin-top: -40px;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            width: 1200px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #006854;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .btn-aprovar {
+            background-color: #006854;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .btn-aprovar:hover {
+            background-color: #005044;
+        }
+
+        .btn-rejeitar {
+            background-color: #c0392b;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-rejeitar:hover {
+            background-color: #922b21;
+        }
+
+        input[type="text"] {
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            width: 200px;
+            margin-right: 5px;
+        }
+
+        .sem-solicitacoes {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+
+        .logout {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .logout a {
+            text-decoration: none;
+            color: #006854;
+            font-weight: 600;
+        }
+
+        .acoes-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-rejeitar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-rejeitar input {
+            width: 220px;
+            padding: 8px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="banner">
+        <h1>Portal do Cooperado</h1>
+    </div>
+
+    <div class="container">
+        <div class="card">
+
+            <div class="logout">
+                <a href="/logout">Sair</a>
+            </div>
+
+            <h2>Solicitações Pendentes</h2>
+
+            {% if solicitacoes %}
+            <table>
+                <tr>
+                    <th style="width: 25%;">Nome</th>
+                    <th style="width: 15%;">CPF</th>
+                    <th style="width: 20%;">Email</th>
+                    <th style="width: 40%;">Ações</th>
+                </tr>
+
+                {% for s in solicitacoes %}
+                <tr>
+                    <td>{{ s[1] }}</td>
+                    <td>{{ s[2] }}</td>
+                    <td>{{ s[3] }}</td>
+                    <td>
+                        <div class="acoes-container">
+
+                            <a href="/admin/aprovar/{{ s[0] }}">
+                                <button class="btn-aprovar">Aprovar</button>
+                            </a>
+
+                            <form action="/admin/rejeitar/{{ s[0] }}" method="POST" class="form-rejeitar">
+                                <input type="text" name="motivo" placeholder="Motivo da rejeição" required>
+                                <button type="submit" class="btn-rejeitar">Rejeitar</button>
+                            </form>
+
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            {% else %}
+                <div class="sem-solicitacoes">
+                    Nenhuma solicitação pendente.
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+</body>
+</html>

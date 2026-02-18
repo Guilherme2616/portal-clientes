@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Portal do Cooperado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+
+        * {
+    box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Montserrat', sans-serif;
+        background-color: #006854;
+        background-image: 
+            linear-gradient(rgba(0, 104, 84, 0.85), rgba(0, 104, 84, 0.85)),
+            url("{{ url_for('static', filename='background.png') }}");
+        background-size: 1000px;   /* controla o tamanho */
+        background-repeat: repeat; 
+        background-position: center;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .logo {
+    width: 140px;
+    margin-bottom: 0px;
+    }
+
+    .login-box {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        width: 360px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+        text-align: center;
+    }
+
+    .login-box h2 {
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #006854;
+    }
+
+    .login-box p {
+        margin-bottom: 25px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        font-family: 'Montserrat', sans-serif;
+        transition: 0.2s;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #006854;
+        box-shadow: 0 0 0 2px rgba(0,104,84,0.15);
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #006854;
+        color: white;
+        border: 2px solid #006854; /* igual espessura do outro */
+        border-radius: 8px;
+        font-size: 14px; /* igual ao input */
+        font-weight: 600;
+        font-family: 'Montserrat', sans-serif;
+        cursor: pointer;
+        transition: 0.3s;
+        display: block;
+    }
+
+
+    .btn-link {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        background: #006854;
+        color: white;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .btn-link:hover {
+        background: #005346;
+        transform: translateY(-1px);
+    }
+
+    button:hover {
+        background: #005346;
+        transform: translateY(-1px);
+    }
+
+    .erro {
+        color: #d93025;
+        margin-bottom: 12px;
+        font-size: 13px;
+    }
+
+    .rodape {
+        margin-top: 22px;
+        font-size: 12px;
+        color: #999;
+    }
+
+    .btn-secundario {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        background: transparent;
+        color: #006854;
+        border: 2px solid #006854;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .btn-secundario:hover {
+        background: #006854;
+        color: white;
+    }
+
+
+</style>
+</head>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ===== MÁSCARA CPF / CNPJ =====
+    const cpfInput = document.getElementById("cpf");
+
+    cpfInput.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, "");
+
+        if (value.length <= 11) {
+            value = value.replace(/(\d{3})(\d)/, "$1.$2");
+            value = value.replace(/(\d{3})(\d)/, "$1.$2");
+            value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        } else {
+            value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+            value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+            value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
+            value = value.replace(/(\d{4})(\d)/, "$1-$2");
+        }
+
+        e.target.value = value;
+    });
+
+});
+</script>
+
+<body>
+    <div class="login-box">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo da Empresa" class="logo">
+        <h2>Portal do Cooperado</h2>
+        <p>Acesse seus documentos</p>
+
+        {% if erro %}
+            <div class="erro">{{ erro }}</div>
+        {% endif %}
+
+        <form method="post">
+            <input type="text" name="cpf" id="cpf" maxlength="18" placeholder="CPF/CNPJ" required>
+            <input type="password" name="senha" placeholder="Senha" required>
+
+            <button type="submit">Entrar</button>
+            
+        </form>
+
+        <a href="{{ url_for('primeiro_acesso') }}" class="btn-secundario">
+            Primeiro Acesso
+        </a>
+
+        <div style="text-align:center; margin-top:15px;">
+            <a href="{{ url_for('admin_login') }}" style="color:#006854; font-weight:600;">
+                Área do Administrador
+            </a>
+        </div>
+
+
+        <div class="rodape">
+            © 2026 Cooperativa Camda
+        </div>
+    </div>
+</body>
+</html>

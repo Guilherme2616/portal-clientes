@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Informes de Rendimento</title>
+
+    <!-- Fonte -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f6f8;
+        }
+
+        /* TOPO COM PATTERN */
+        .header {
+            background-color: #006854;
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+            background-image:
+                linear-gradient(rgba(0, 104, 84, 0.85), rgba(0, 104, 84, 0.85)),
+                url('{{ url_for("static", filename="background.png") }}');
+            background-size: 1000px;
+            background-repeat: repeat;
+        }
+
+        .container {
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 800px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
+
+        td {
+            border-bottom: 1px solid #eee;
+            padding: 20px;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .actions {
+            width: 80px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .actions:hover {
+            background-color: #f0f0f0;
+        }
+
+        .voltar {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .voltar a {
+            text-decoration: none;
+            color: #006854;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h2>Portal do Cooperado</h2>
+        <h3>Informes de Rendimento</h3>
+    </div>
+
+    <div class="container">
+        <table>
+
+    {% if anos %}
+        {% for ano in anos %}
+        <tr>
+            <td>Informes de Rendimento - {{ ano }}</td>
+
+            <td class="actions">
+                <a href="{{ url_for('visualizar_informe', ano=ano) }}"target="_blank">👁</a>
+            </td>
+
+            <td class="actions">
+                <a href="{{ url_for('baixar_informe', ano=ano) }}">⬇</a>
+            </td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="3" style="text-align:center; padding:40px;">
+                Nenhum informe disponível no momento.
+            </td>
+        </tr>
+    {% endif %}
+
+</table>
+
+    </div>
+
+    <div class="voltar">
+        <a href="{{ url_for('documentos') }}">← Voltar</a>
+    </div>
+
+</body>
+</html>

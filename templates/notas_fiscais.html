@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Notas Fiscais</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f6f8;
+        }
+
+        /* HEADER COM PATTERN */
+        .header {
+            background-color: #006854;
+            background-image:
+                linear-gradient(rgba(0, 104, 84, 0.85), rgba(0, 104, 84, 0.85)),
+                url('{{ url_for("static", filename="background.png") }}');
+            background-size: 1000px;
+            background-repeat: repeat;
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .container {
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 800px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
+
+        td {
+            border-bottom: 1px solid #eee;
+            padding: 20px;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .actions {
+            width: 80px;
+            text-align: center;
+        }
+
+        .actions a {
+            text-decoration: none;
+            font-size: 18px;
+            margin: 0 8px;
+        }
+
+        .voltar {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .voltar a {
+            text-decoration: none;
+            color: #006854;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h2>Portal do Cooperado</h2>
+        <h3>Notas Fiscais</h3>
+    </div>
+
+    <div class="container">
+        <table>
+            {% for arquivo in arquivos %}
+            <tr>
+                <td>{{ arquivo }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('baixar', tipo='notas_fiscais', nome_arquivo=arquivo) }}">⬇</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="voltar">
+        <a href="{{ url_for('documentos') }}">← Voltar</a>
+    </div>
+
+</body>
+</html>
